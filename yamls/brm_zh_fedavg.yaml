@@ -1,0 +1,59 @@
+data_config:
+  data_name: rm
+  model_max_length: 1024
+  debug_mode: false
+  overwrite_cache: true
+  template_name: llama_zh_rm
+
+federated_config:
+  alpha: -1
+  clients_num: 20
+  rounds: 4
+  sample: 0.1
+  client_sample_type: coverage
+
+  log_valid_len:  # also effects in cen
+  save_valid_len: 2
+
+  test_rounds: false
+  log_test_len:
+
+  pson: false
+  weight_type: loss
+  server_ip: 127.0.0.1
+  server_port: 15001
+
+model_config:
+  tuning_type: lora # lora/emulator/
+  lora_rank: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  num_virtual_tokens: 64
+  bottleneck_dim: 16
+  model_type: llama2-rm
+
+training_config:
+  seed: 42
+  num_train_epochs: 1
+  learning_rate: 3e-4
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 8
+  per_device_eval_batch_size: 16
+  load_in_8bit: true
+  bf16: true
+#  weight_decay: 0.
+#  warmup_ratio: 0.03
+  lr_scheduler_type: cosine # linear, cosine
+
+  local_trainer_name: fedavg_rm
+  eval_name: local
+  metric_name: pairwise
+  is_decreased_valid_metric: false # ppl:true
+  eval_device: 3
+  eval_port: 10001
+  eval_during_train: false
+
+  do_sample: false
+  generation_max_length: 512
+
+  save_outputs: false

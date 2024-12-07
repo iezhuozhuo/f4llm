@@ -1,0 +1,70 @@
+data_config:
+  data_name: dpo
+  model_max_length: 1024
+  debug_mode: false
+  overwrite_cache: false
+  template_name: tinyllama_chat
+
+federated_config:
+  alpha: -1
+  clients_num: 20
+  rounds: 25
+  sample: 0.1
+
+  log_valid_len:  # also effects in cen
+  save_valid_len: 5
+
+  test_rounds: false
+  log_test_len:
+
+  pson: false
+
+  server_ip: 127.0.0.1
+  server_port: 50051
+
+  fedopt_beta1: 0.9
+  fedopt_beta2: 0.99
+  fedopt_eta: 1e-3
+  fedopt_tau: 1e-3
+
+model_config:
+  tuning_type: lora # lora/emulator/
+  lora_rank: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  num_virtual_tokens: 64
+  bottleneck_dim: 16
+  model_type: tinyllama
+
+training_config:
+  seed: 42
+  num_train_epochs: 1
+  learning_rate: 3e-4
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
+  per_device_eval_batch_size: 16
+  load_in_8bit: true
+  bf16: true
+#  weight_decay: 0.
+#  warmup_ratio: 0.03
+  lr_scheduler_type: cosine # linear, cosine
+  local_trainer_name: scaffold_dpo
+
+  eval_name: local
+  metric_name: pairwise
+  is_decreased_valid_metric: false # ppl:true
+  eval_device: 1
+  eval_port: 10001
+  eval_during_train: false
+
+  do_sample: false
+  generation_max_length: 512
+
+  save_outputs: true
+
+#  visualization:
+#    backend: wandb
+#    key:
+#    project: safe_rlhf_fedavg_dpo
+#    trial: TRIAL1
+
